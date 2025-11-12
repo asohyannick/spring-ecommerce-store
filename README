@@ -1,0 +1,115 @@
+# 🛒 E-Commerce RESTful API
+
+Welcome to the **E-Commerce RESTful API** — a robust and scalable backend built using **Java**, **Spring Boot**, and **MySQL**.
+This API provides a complete backend solution for managing an online store, covering product management, orders, authentication, payments, and more.
+
+---
+
+## 👨‍💻 Developer Profile
+
+**👋 Author:** [Asoh Yannick](https://github.com/asohyannick/mercadoSpring)
+**💼 Role:** Backend Software Engineer
+**🧠 Expertise:**
+- Java • Spring Boot • Spring Data JPA • Spring Security
+- MySQL • Docker • RESTful API Architecture
+- Microservices • Cloud Deployments • CI/CD
+
+> “Building high-performance and scalable backend systems that power modern applications.”
+
+---
+
+## ✅ Project Overview
+
+This project follows **REST API best practices** and provides a foundation for a complete **e-commerce backend** system.
+
+The key features include:
+
+| ✅ | Business Feature |
+|----|------------------|
+| 🟩 **User Authentication & Authorization (JWT, Spring Security)** |
+| 🟩 **Product Catalog Management** |
+| 🟩 **Order & Payment Processing** |
+| 🟩 **Shopping Cart & Wishlist** |
+| 🟩 **Inventory Management** |
+| 🟩 **Customer Management & Profiles** |
+| 🟩 **Admin Dashboard & Role-Based Access** |
+| 🟩 **Email Notifications & Invoice Generation** |
+| 🟩 **Reporting & Analytics** |
+
+> 🟩 Each green box indicates that the endpoint has been implemented and tested successfully.
+
+---
+
+## ⚙️ Tech Stack
+
+| Layer | Technology |
+|-------|-------------|
+| **Backend Framework** | Spring Boot |
+| **Database** | MySQL |
+| **ORM** | Spring Data JPA |
+| **Security** | Spring Security (JWT Authentication) |
+| **Containerization** | Docker |
+| **Build Tool** | Maven / Gradle |
+| **Testing** | JUnit & Mockito |
+
+---
+
+## 📘 API Endpoints Summary
+
+Below is a high-level summary of the 200+ endpoints designed for this backend system:
+
+| Category | Description | Example Endpoint |
+|-----------|--------------|------------------|
+| 🟩 **Auth** | Register, Login, Logout, Forgot Password | `/api/v1/auth/register` |
+| 🟩 **Users** | Manage user profiles & roles | `/api/v1/users/{id}` |
+| 🟩 **Products** | CRUD for products, categories & brands | `/api/v1/products` |
+| 🟩 **Orders** | Create & manage customer orders | `/api/v1/orders/{orderId}` |
+| 🟩 **Payments** | Integrate with payment providers | `/api/v1/payments/checkout` |
+| 🟩 **Cart** | Add/remove items in user cart | `/api/v1/cart/add` |
+| 🟩 **Wishlist** | Manage user wishlist | `/api/v1/wishlist` |
+| 🟩 **Reviews** | Product reviews and ratings | `/api/v1/reviews` |
+| 🟩 **Analytics** | Dashboard metrics for sales & products | `/api/v1/analytics/sales` |
+| 🟩 **Admin** | Manage users, inventory & reports | `/api/v1/admin/users` |
+
+---
+
+## 🐳 Running Locally (Docker Setup)
+
+```bash
+# Clone the repository
+git clone https://github.com/asohyannick/ecommerce-backend.git
+cd ecommerce-backend
+
+# Build and run using Docker
+docker-compose up --build
+
+🧩 Contribution Guide
+
+We welcome contributions from developers around the world 🌍!
+If you’re interested in collaborating:
+
+Fork the repository
+
+Create a new branch for your feature or bug fix
+
+Commit your changes with clear messages
+
+Submit a Pull Request (PR)
+
+💡 Let’s build something impactful together!
+
+📫 Contact
+
+📧 Email: asohyannick.dev@gmail.com
+
+🔗 GitHub: github.com/asohyannick
+
+💼 LinkedIn: linkedin.com/in/asohyannick
+
+🟩 Project Status
+
+✅ All core backend features implemented successfully.
+
+🚀 Continuous improvements and community contributions are encouraged!
+
+© 2025 Asoh Yannick — Backend Software Engineer
