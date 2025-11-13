@@ -6,6 +6,7 @@ import com.mercado.mercadoSpring.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.PublicKey;
 import java.util.List;
 
 @Service
@@ -67,24 +68,37 @@ public class ProductService {
         return productRepository.findByCategory(category);
     }
 
-    public List<Product> getProductsByDescription(String description) {
-        return productRepository.findByDescription(description);
+    public List<Product>  findProductsByDescription(String description) {
+        return productRepository.findByDescriptionContaining(description);
     }
 
     public List<Product> getProductsByCategoryAndDescription(String category, String description) {
+        if (category != null) category = category.trim();
+        if (description != null) description = description.trim();
         return productRepository.findByCategoryAndDescription(category, description);
     }
 
-    public List<Product> getAvailableProducts() {
-        return productRepository.findByIsAvailableTrue();
+    public List<Product> searchProducts(
+            String keyword,
+            String brand,
+            String category,
+            Double minPrice,
+            Double maxPrice,
+            Boolean isAvailable,
+            Double minRating,
+            Double maxRating
+    ) {
+        return productRepository.searchProducts(
+                keyword,
+                brand,
+                category,
+                minPrice,
+                maxPrice,
+                isAvailable,
+                minRating,
+                maxRating
+        );
     }
 
-    public List<Product> getAvailableProductsByCategory(String category) {
-        return productRepository.findByCategoryAndIsAvailableTrue(category);
-    }
-
-    public List<Product> searchProducts(String keyword) {
-        return productRepository.searchProducts(keyword);
-    }
 }
 

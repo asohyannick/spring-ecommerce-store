@@ -1,6 +1,7 @@
 spring:
   application:
     name: ${APP_NAME}
+    APP_VERSION: ${API_VERSION}
 
   datasource:
     url: ${DB_URL}
@@ -19,4 +20,6 @@ spring:
 
 server:
   port: ${PORT}
+
+
 
