@@ -1,13 +1,8 @@
 package com.mercado.mercadoSpring.dto.product;
 
 import jakarta.validation.constraints.*;
-import lombok.Builder;
-import lombok.Data;
 
-@Data
-@Builder
-public class ProductDto {
-
+public class UpdateProductDto {
     private Long id;
 
     @NotBlank(message = "Image URL cannot be blank")
@@ -22,7 +17,7 @@ public class ProductDto {
     private String description;
 
     @Positive(message = "Price must be a positive value")
-    private Double price;
+    private double price;
 
     @NotBlank(message = "Category is required")
     @Size(max = 50, message = "Category cannot exceed 50 characters")
