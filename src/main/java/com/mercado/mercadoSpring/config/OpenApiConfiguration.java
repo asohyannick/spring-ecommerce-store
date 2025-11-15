@@ -4,6 +4,7 @@ import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.tags.Tag;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,16 +14,27 @@ public class OpenApiConfiguration {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
+
+                // ----------------- TAG ORDER (Auth always first) -----------------
+                .addTagsItem(new Tag()
+                        .name("Authentication & User Management Endpoints")
+                        .description("All login, signup, verification & token-related endpoints ❤️"))
+
+                .addTagsItem(new Tag()
+                        .name("Products Management Endpoints")
+                        .description("Endpoints for managing marketplace products 🛒"))
+
+                // ----------------- API INFO -----------------
                 .info(new Info()
                         .title("💖 Mercado Online Marketplace API 💖")
                         .version("v1.0.0")
                         .description("""
                                 Welcome to the ❤️ Mercado Ecommerce API ❤️!  
                                 This API is lovingly crafted with **Java**, **Spring Boot**, **Hibernate**, **Spring Security**, **JWT**, and **MySQL** by **Asoh Yannick**, your friendly Backend Java Developer.  
-                                
+
                                 Here, you can explore and interact with all endpoints for products, categories, searches, and more.  
                                 Enjoy your journey and code with ❤️!  
-                                
+
                                 🌐 **Source Code:** [View on GitHub](https://github.com/asohyannick/mercadoSpring)
                                 """)
                         .contact(new Contact()
@@ -35,3 +47,4 @@ public class OpenApiConfiguration {
                 );
     }
 }
+

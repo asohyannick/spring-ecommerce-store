@@ -15,14 +15,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
-
 @RestController
+@Tag(name = "Authentication & User Management Endpoints")
 @RequestMapping("/api/${API_VERSION}/users")
 @RequiredArgsConstructor
-@Tag(name = "Authentication and User Management Endpoints", description = "APIs for user authentication and management")
 public class AuthController {
     private final AuthService authService;
     private final AuthRepository authRepository;

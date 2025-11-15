@@ -1,0 +1,67 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    container_name: store_mysql
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - store_net
+
+  backend:
+    build: .
+    restart: always
+    container_name: store_backend
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+    ports:
+      - "${APPLICATION_PORT}:8080"
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+
+      API_VERSION: ${API_VERSION}
+      APP_NAME: ${APP_NAME}
+
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      REFRESH_ACCESS_TOKEN: ${REFRESH_ACCESS_TOKEN}
+      REFRESH_TOKEN_EXPIRATION: ${REFRESH_TOKEN_EXPIRATION}
+      ACCESS_TOKEN_EXPIRATION: ${ACCESS_TOKEN_EXPIRATION}
+
+      STRIPE_API_KEY: ${STRIPE_API_KEY}
+
+      FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID}
+      FIREBASE_PRIVATE_KEY_ID: ${FIREBASE_PRIVATE_KEY_ID}
+      FIREBASE_PRIVATE_KEY: ${FIREBASE_PRIVATE_KEY}
+      FIREBASE_CLIENT_EMAIL: ${FIREBASE_CLIENT_EMAIL}
+      FIREBASE_CLIENT_ID: ${FIREBASE_CLIENT_ID}
+      FIREBASE_AUTH_URL: ${FIREBASE_AUTH_URL}
+      FIREBASE_TOKEN_URL: ${FIREBASE_TOKEN_URL}
+      FIREBASE_CERT_URL: ${FIREBASE_CERT_URL}
+
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+
+    networks:
+      - store_net
+
+volumes:
+  mysql_data:
+
+networks:
+  store_net:

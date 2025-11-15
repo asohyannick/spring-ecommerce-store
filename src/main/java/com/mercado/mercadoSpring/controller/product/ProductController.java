@@ -12,11 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
 @RestController
-@RequestMapping("/api/${API_VERSION}/product")
+@RequestMapping("/api/${API_VERSION}/products")
+@Tag(name= "Products Management Endpoints")
 @RequiredArgsConstructor
-@Tag(name = "Product Management Endpoints", description = "APIs for managing products")
 public class ProductController {
     private final ProductService productService;
     private final ProductRepository productRepository;
