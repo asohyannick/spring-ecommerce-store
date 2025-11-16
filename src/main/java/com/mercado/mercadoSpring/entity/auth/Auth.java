@@ -34,7 +34,7 @@ public class Auth {
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "role", nullable = false, length = 50)
     private UserRole role = UserRole.CUSTOMER;
 
     @Builder.Default

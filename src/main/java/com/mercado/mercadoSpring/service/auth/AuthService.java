@@ -13,6 +13,7 @@ import com.mercado.mercadoSpring.dto.auth.ResponseDto;
 import com.mercado.mercadoSpring.entity.auth.Auth;
 import com.mercado.mercadoSpring.mappers.auth.AuthMapper;
 import com.mercado.mercadoSpring.repository.auth.AuthRepository;
+import com.mercado.mercadoSpring.utils.RoleAssigner;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +28,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -96,6 +96,10 @@ public class AuthService {
      }
         Auth auth = authMapper.toAuthEntity(registrationDto);
         auth.setPassword(passwordEncoder.encode(registrationDto.password()));
+
+        // Assign role based on email
+        auth.setRole(RoleAssigner.assignRole(registrationDto.email()));
+
         // Generate 6-digit 2FA code
         String twoFactorCode = generate2FACode(auth);
         auth.setTwoFactorSecret(twoFactorCode);
