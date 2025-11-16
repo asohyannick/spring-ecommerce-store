@@ -16,5 +16,4 @@ public interface AuthRepository extends JpaRepository<Auth, Long> {
     Optional<Auth> findByTwoFactorSecretAndIsTwoFactorVerifiedFalse(String otp);
     Optional<Auth> findByRefreshToken(String refreshToken);
     Optional<Auth> findByTwoFactorSecret(String resetToken);
-
 }

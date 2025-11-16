@@ -1,16 +1,24 @@
 package com.mercado.mercadoSpring.controller.product;
 import com.mercado.mercadoSpring.config.ApiResponseConfig;
+import com.mercado.mercadoSpring.dto.product.PageResponse;
 import com.mercado.mercadoSpring.dto.product.ProductDto;
+import com.mercado.mercadoSpring.dto.product.ProductResponseDTO;
 import com.mercado.mercadoSpring.entity.product.Product;
 import com.mercado.mercadoSpring.mappers.product.ProductMapper;
 import com.mercado.mercadoSpring.repository.product.ProductRepository;
 import com.mercado.mercadoSpring.service.product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
 import java.util.List;
 @RestController
 @RequestMapping("/api/${API_VERSION}/products")
@@ -114,12 +122,12 @@ public class ProductController {
             @RequestParam(required = false) String category,
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice,
-            @RequestParam(required = false) Boolean isAvailable,
+            @RequestParam(required = false) Boolean available,
             @RequestParam(required = false) Double minRating,
             @RequestParam(required = false) Double maxRating
     ) {
         List<Product> products = productService.searchProducts(
-                keyword, brand, category, minPrice, maxPrice, isAvailable, minRating, maxRating
+                keyword, brand, category, minPrice, maxPrice, available, minRating, maxRating
         );
 
         List<ProductDto> productDtos = products.stream()
@@ -190,4 +198,35 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(
+            summary = "Filter, sort and paginate products",
+            description = "Allows users to filter products by keyword, brand, category, pricing, availability, rating, and sort by multiple fields."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Products retrieved successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input parameters")
+    })
+    @GetMapping("/filter")
+    public ApiResponseConfig<PageResponse<ProductResponseDTO>> filterProducts(
+            @Parameter(description = "Search keyword in name or description") @RequestParam(required = false) String keyword,
+            @Parameter(description = "Brand of the product") @RequestParam(required = false) String brand,
+            @Parameter(description = "Category of the product") @RequestParam(required = false) String category,
+            @Parameter(description = "Minimum price") @RequestParam(required = false) Double minPrice,
+            @Parameter(description = "Maximum price") @RequestParam(required = false) Double maxPrice,
+            @Parameter(description = "Availability status") @RequestParam(required = false) Boolean available,
+            @Parameter(description = "Minimum rating") @RequestParam(required = false) Double minRating,
+            @Parameter(description = "Maximum rating") @RequestParam(required = false) Double maxRating,
+            @Parameter(description = "Page number (0-based)") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Page size") @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Fields to sort by, comma-separated") @RequestParam(defaultValue = "price") List<String> sortFields,
+            @Parameter(description = "Sort direction: asc or desc") @RequestParam(defaultValue = "asc") String direction
+    ) {
+
+        PageResponse<ProductResponseDTO> products = productService.filterProducts(
+                keyword, brand, category, minPrice, maxPrice, available,
+                minRating, maxRating, page, size, sortFields, direction
+        );
+
+        return new ApiResponseConfig<>("Products filtered, sorted, and paginated successfully 🛒", products);
+    }
 }

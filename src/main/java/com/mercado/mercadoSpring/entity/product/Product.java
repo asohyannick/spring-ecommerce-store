@@ -29,7 +29,8 @@ public class Product {
 
     private int stockQuantity;
 
-    private Boolean isAvailable;
+    @Column(name = "is_available", nullable = false)
+    private Boolean available = true;
 
     private Double rating;
 
