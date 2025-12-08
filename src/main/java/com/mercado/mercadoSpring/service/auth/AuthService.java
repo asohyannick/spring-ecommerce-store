@@ -11,12 +11,14 @@ import com.mercado.mercadoSpring.dto.auth.OTPRequest;
 import com.mercado.mercadoSpring.dto.auth.RegistrationDto;
 import com.mercado.mercadoSpring.dto.auth.ResponseDto;
 import com.mercado.mercadoSpring.entity.auth.Auth;
+import com.mercado.mercadoSpring.exception.AccountBlockedException;
 import com.mercado.mercadoSpring.mappers.auth.AuthMapper;
 import com.mercado.mercadoSpring.repository.auth.AuthRepository;
 import com.mercado.mercadoSpring.utils.RoleAssigner;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,27 +70,36 @@ public class AuthService {
         return otp;
     }
 
-    private void send2FACodeEmail(String toEmail, String code) {
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(toEmail);
-        email.setSubject("🎉 Verify Your Mercado Account");
-        email.setText("""
-        Hello,
+        private void send2FACodeEmail(String toEmail, String code) {
+            SimpleMailMessage email = new SimpleMailMessage();
+            email.setTo(toEmail);
+            email.setSubject("Mercado Account Verification: Your 2FA Security Code");
+            email.setText("""
+            Dear Mercado User,
+        
+            Thank you for securing your account.
+        
+            To verify your identity and complete your login or registration, please use the following Two-Factor Authentication (2FA) code:
+        
+            ==================================
+                Your Verification Code: %s
+            ==================================
+            
+            ⚠️ Important Security Notice:
+            
+            1. This code is valid for the next **5 minutes only**. Please enter it promptly on the verification screen.
+            2. **Do not share this code** with anyone, including Mercado employees.
+            
+            If you did not attempt to access or register a Mercado account, please disregard this email. Your account security remains intact.
+        
+            If you have any questions, please contact our support team.
+        
+            Sincerely,
+            The Mercado Team led  by Asoh Yannick
+            """.formatted(code));
 
-        Welcome to Mercado! Your verification code is:
-
-        %s
-
-        ⚡ This code will expire in 5 minutes, so make sure to use it promptly to activate your account.
-
-        If you didn't register for a Mercado account, you can safely ignore this email.
-
-        Cheers,
-        The Mercado Team
-        """.formatted(code));
-
-        mailSender.send(email);
-    }
+            mailSender.send(email);
+        }
 
     public ResponseDto register(RegistrationDto registrationDto) {
         if (authRepository.existsByEmail(registrationDto.email())) {
@@ -103,6 +114,7 @@ public class AuthService {
         // Generate 6-digit 2FA code
         String twoFactorCode = generate2FACode(auth);
         auth.setTwoFactorSecret(twoFactorCode);
+        auth.setIsTwoFactorVerified(false);
         auth.setIsTwoFactorVerified(Boolean.valueOf(String.valueOf(false)));
 
         // Generate access + refresh tokens
@@ -113,7 +125,6 @@ public class AuthService {
         auth.setRefreshToken(refreshToken);
 
         Auth savedAuth = authRepository.save(auth);
-
         // Send 2FA code via email
         send2FACodeEmail(savedAuth.getEmail(), twoFactorCode);
 
@@ -123,8 +134,6 @@ public class AuthService {
                 savedAuth.getLastName(),
                 savedAuth.getEmail(),
                 savedAuth.getIsAccountBlocked(),
-                accessToken,
-                refreshToken,
                 UserRole.valueOf(String.valueOf(savedAuth.getRole()))
         );
     }
@@ -180,11 +189,9 @@ public class AuthService {
     }
 
     public ResponseDto refreshToken(String refreshToken) {
-        // Find user by refresh token
         Auth auth = authRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
 
-        // Validate token
         try {
             jwtUtil.validateToken(refreshToken);
         } catch (ExpiredJwtException e) {
@@ -205,8 +212,6 @@ public class AuthService {
                 auth.getLastName(),
                 auth.getEmail(),
                 auth.getIsAccountBlocked(),
-                newAccessToken,
-                newRefreshToken,
                 UserRole.valueOf(String.valueOf(auth.getRole()))
         );
     }
@@ -248,36 +253,40 @@ public class AuthService {
                 auth.getLastName(),
                 auth.getEmail(),
                 auth.getIsAccountBlocked(),
-                accessToken,
-                refreshToken,
                 UserRole.valueOf(String.valueOf(auth.getRole()))
         );
     }
 
     public Auth login(LoginDto loginDto) {
         Auth auth = authRepository.findByEmail(loginDto.email())
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+                .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
         if (auth.getIsAccountBlocked()) {
-            throw new RuntimeException("Your account has been blocked. Contact the System Administrator.");
+            throw new AccountBlockedException("Your account has been blocked. Contact the System Administrator.");
         }
 
         if (!passwordEncoder.matches(loginDto.password(), auth.getPassword())) {
             auth.setFailedLoginAttempts(auth.getFailedLoginAttempts() + 1);
+
+            // Block logic
             if (auth.getFailedLoginAttempts() >= 5) {
                 auth.setIsAccountBlocked(true);
                 authRepository.save(auth);
-                throw new RuntimeException("Your account has been blocked due to multiple failed login attempts. Contact the System Administrator.");
+                throw new AccountBlockedException("Your account has been blocked due to multiple failed login attempts. Contact the System Administrator.");
             }
 
-            throw  new RuntimeException("Invalid email or password");
+            authRepository.save(auth);
+            throw new BadCredentialsException("Invalid email or password");
         }
+
+        // 4. Success Path
         auth.setIsEmailVerified(true);
-        auth.setFailedLoginAttempts(0); // Reset on successful login
-        // Generate access + refresh tokens
+        auth.setFailedLoginAttempts(0);
+
         String accessToken = jwtUtil.generateAccessToken(auth.getEmail(), String.valueOf(auth.getRole().name()));
         String refreshToken = jwtUtil.generateRefreshToken(auth.getEmail());
         auth.setAccessToken(accessToken);
         auth.setRefreshToken(refreshToken);
+
         authRepository.save(auth);
         return auth;
     }
@@ -292,8 +301,6 @@ public class AuthService {
                 auth.getLastName(),
                 auth.getEmail(),
                 auth.getIsAccountBlocked(),
-                null,
-                null,
                 UserRole.valueOf(String.valueOf(auth.getRole()))
         );
     }
@@ -306,8 +313,6 @@ public class AuthService {
                 auth.getLastName(),
                 auth.getEmail(),
                 auth.getIsAccountBlocked(),
-                null,
-                null,
                 UserRole.valueOf(String.valueOf(auth.getRole()))
         );
     }

@@ -37,7 +37,6 @@ public class AuthController {
         refreshCookie.setSecure(false); // true in production
         refreshCookie.setPath("/");
         refreshCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days, or match refresh exp
-
         response.addCookie(accessCookie);
         response.addCookie(refreshCookie);
     }
@@ -68,10 +67,6 @@ public class AuthController {
             HttpServletResponse response
     ) {
         ResponseDto responseDto = authService.register(registrationDto);
-        // Set HttpOnly cookie with tokens
-        if (responseDto.accessToken() != null && responseDto.refreshToken() != null) {
-           addAuthCookies(response, responseDto.accessToken(), responseDto.refreshToken());
-        }
         ApiResponseConfig<ResponseDto> apiResponse = new ApiResponseConfig<>(
                 "🎉 Registration successful! A 2FA verification code has been sent to your email. Please enter it within 5 minutes to activate your account.",
                responseDto
@@ -163,8 +158,6 @@ public class AuthController {
                 auth.getLastName(),
                 auth.getEmail(),
                 auth.getIsAccountBlocked(),
-                auth.getAccessToken(),
-                auth.getRefreshToken(),
                 UserRole.valueOf(String.valueOf(auth.getRole()))
         );
 
@@ -223,8 +216,6 @@ public class AuthController {
         cookie.setPath("/");
         cookie.setMaxAge(15 * 60);    // 15 minutes
 
-        // Add cookie to the response
-
         response.addCookie(cookie);
 
         ApiResponseConfig<String> res = new ApiResponseConfig<>(
@@ -257,7 +248,6 @@ public class AuthController {
     @Operation(summary = "Fetch all registered users")
     public ResponseEntity<ApiResponseConfig<List<Auth>>> findAllUsers() {
         List<Auth> users = authService.findAllUsers();
-
         ApiResponseConfig<List<Auth>> response = new ApiResponseConfig<>(
                 "Fetched all users successfully",
                 users
@@ -318,16 +308,12 @@ public class AuthController {
                 auth.getLastName(),
                 auth.getEmail(),
                 auth.getIsAccountBlocked(),
-                auth.getAccessToken(),
-                auth.getRefreshToken(),
                 UserRole.valueOf(String.valueOf(auth.getRole()))
         );
-
         ApiResponseConfig<ResponseDto> response = new ApiResponseConfig<>(
                 "Login with Google successful",
                 responseDto
         );
-
         return ResponseEntity.ok(response);
     }
 

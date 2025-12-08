@@ -1,13 +1,13 @@
 package com.mercado.mercadoSpring.dto.auth;
-
-import com.mercado.mercadoSpring.constants.user.UserRole;
-
-public record ResponseDto(
+import java.util.Date;
+public record UserResponseDto(
         String firstName,
         String lastName,
         String email,
+        String role,
         Boolean isAccountBlocked,
-        UserRole role
+        Date  createdAt,
+        Date updatedAt
 ) {
 
 }

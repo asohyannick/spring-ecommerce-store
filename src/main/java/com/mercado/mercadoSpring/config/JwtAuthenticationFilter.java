@@ -1,5 +1,4 @@
 package com.mercado.mercadoSpring.config;
-
 import com.mercado.mercadoSpring.constants.user.UserRole;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;

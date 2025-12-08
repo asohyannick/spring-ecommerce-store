@@ -35,40 +35,51 @@ public class Auth {
     private UserRole role = UserRole.CUSTOMER;
 
     @Builder.Default
+    @JsonIgnore
     @Column(nullable = false)
     private Boolean isAccountBlocked = false;
 
     @Builder.Default
+    @JsonIgnore
     @Column(nullable = false)
     private Boolean isEmailVerified = false;
 
+    @JsonIgnore
     @Column
     private String refreshToken;
 
+    @JsonIgnore
     @Column
     private String accessToken;
 
+    @JsonIgnore
     @Column
     private String twoFactorSecret;
 
     @Builder.Default
+    @JsonIgnore
     @Column(nullable = false)
     private Boolean isTwoFactorVerified = false;
 
+    @JsonIgnore
     @Column
     private LocalDateTime twoFactorExpiry;
 
     @Builder.Default
+    @JsonIgnore
     @Column(nullable = false)
     private Integer twoFactorAttempts = 0;
 
     @Builder.Default
+    @JsonIgnore
     @Column(nullable = false)
     private Integer failedLoginAttempts = 0;
 
+    @JsonIgnore
     @Column
     private String magicToken;
 
+    @JsonIgnore
     @Column
     private LocalDateTime magicTokenExpiration;
 
@@ -84,9 +95,9 @@ public class Auth {
         updatedAt = LocalDateTime.now();
     }
 
+
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
 }
