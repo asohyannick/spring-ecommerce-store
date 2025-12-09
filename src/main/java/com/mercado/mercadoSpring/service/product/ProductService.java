@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.List;
 @Service
 @RequiredArgsConstructor
@@ -84,8 +86,8 @@ public class ProductService {
     }
 
     public List<Product> searchProducts(
-            String keyword,
-            String brand,
+            @RequestParam(required = false, name = "name") String keyword, // <-- FIX 1
+            @RequestParam(required = false) String brand,
             String category,
             Double minPrice,
             Double maxPrice,

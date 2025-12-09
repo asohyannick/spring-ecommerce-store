@@ -1,14 +1,11 @@
 package com.mercado.mercadoSpring.repository.product;
-
 import com.mercado.mercadoSpring.entity.product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import java.util.List;
-
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p " +
@@ -16,9 +13,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "   OR LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
             "AND (:brand IS NULL OR LOWER(p.brand) = LOWER(:brand)) " +
             "AND (:category IS NULL OR LOWER(p.category) = LOWER(:category)) " +
+            "AND (:available IS NULL OR p.available = :available) " +
             "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
             "AND (:maxPrice IS NULL OR p.price <= :maxPrice) " +
-            "AND (:isAvailable IS NULL OR p.available = :available) " +
             "AND (:minRating IS NULL OR p.rating >= :minRating) " +
             "AND (:maxRating IS NULL OR p.rating <= :maxRating)")
     List<Product> searchProducts(
@@ -27,7 +24,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             @Param("category") String category,
             @Param("minPrice") Double minPrice,
             @Param("maxPrice") Double maxPrice,
-            @Param("isAvailable") Boolean isAvailable,
+            @Param("available") Boolean available,
             @Param("minRating") Double minRating,
             @Param("maxRating") Double maxRating
     );
