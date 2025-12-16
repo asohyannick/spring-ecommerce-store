@@ -61,6 +61,13 @@ public class SecurityConfig {
                                 apiBase + "/products/available-by-description/**"
                         ).permitAll()
 
+                        // ⚠️ ADD THESE LINES TO ALLOW SWAGGER/OPENAPI ACCESS ⚠️
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+
                         // ---------- CLIENT routes ----------
                         .requestMatchers(
                                 apiBase + "/products/{id}",
@@ -85,6 +92,36 @@ public class SecurityConfig {
                                 UserRole.ADMIN.name(),
                                 UserRole.DEVOPS.name()
                         )
+
+                        .requestMatchers(
+                                apiBase + "/cart/{cartItemId}/add",
+                                apiBase + "/cart/items",
+                                apiBase + "/cart/products/details",
+                                apiBase + "/cart/{cartId}/items",
+                                apiBase + "/cart/item/{cartItemId}/remove",
+                                apiBase + "/cart/{cartId}/clear",
+                                apiBase + "/cart/{cartId}/total-quantity",
+                                apiBase + "/cart/{cartId}/total-price",
+                                apiBase + "/cart/item/{cartItemId}/update-quantity/{quantity}"
+
+                        ).hasAnyRole(
+                                UserRole.ADMIN.name(),
+                                UserRole.SELLER.name(),
+                                UserRole.CUSTOMER.name()
+                        )
+
+                        .requestMatchers(
+                                apiBase + "payments/create-intent",
+                                apiBase + "payments/fetch-payments",
+                                apiBase + "payments/fetch-payments/{id}"
+                        ).hasAnyRole(UserRole.CUSTOMER.name())
+
+                        .requestMatchers(
+                                apiBase + "/orders/create-order",
+                                apiBase + "/orders/user/{userId}/orders",
+                                apiBase + "/orders/{orderId}/details",
+                                apiBase + "/orders/{orderId}/cancel"
+                        ).hasAnyRole(UserRole.CUSTOMER.name())
 
                         // ---------- ADMIN routes ----------
                         .requestMatchers(

@@ -1,5 +1,4 @@
 package com.mercado.mercadoSpring.config;
-
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
@@ -7,10 +6,8 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.tags.Tag;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 @Configuration
 public class OpenApiConfiguration {
-
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
@@ -22,7 +19,11 @@ public class OpenApiConfiguration {
 
                 .addTagsItem(new Tag()
                         .name("Products Management Endpoints")
-                        .description("Endpoints for managing marketplace products 🛒"))
+                        .description("Endpoints for managing marketplace products 📂"))
+
+                .addTagsItem(new Tag()
+                        .name("Shopping Cart Management Endpoints")
+                        .description("Endpoints for managing shopping categories 🛒"))
 
                 // ----------------- API INFO -----------------
                 .info(new Info()

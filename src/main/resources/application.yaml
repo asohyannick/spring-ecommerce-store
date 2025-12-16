@@ -43,6 +43,7 @@ jwt:
 # Stripe Configuration
 stripe:
   api-key: ${STRIPE_API_KEY}
+  webhookSecret: ${STRIPE_WEBHOOK_SECRET}
 
 # Firebase Configuration
 firebase:
@@ -62,7 +63,6 @@ logging:
       springframework:
         security=DEBUG:
     jakarta.mail: WARN
-
 
 
 

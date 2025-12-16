@@ -239,7 +239,6 @@ public class AuthController {
                 "Password has been reset successfully!",
                 null
         );
-
         return ResponseEntity.ok(response);
     }
 
@@ -252,7 +251,6 @@ public class AuthController {
                 "Fetched all users successfully",
                 users
         );
-
         return ResponseEntity.ok(response);
     }
 
