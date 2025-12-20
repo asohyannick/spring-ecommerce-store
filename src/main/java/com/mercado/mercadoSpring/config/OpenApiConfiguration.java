@@ -22,8 +22,12 @@ public class OpenApiConfiguration {
                         .description("Endpoints for managing marketplace products 📂"))
 
                 .addTagsItem(new Tag()
-                        .name("Shopping Cart Management Endpoints")
+                        .name("ShoppingCart Management Endpoints")
                         .description("Endpoints for managing shopping categories 🛒"))
+
+                .addTagsItem(new Tag()
+                        .name("Payment Management Endpoints")
+                        .description("Endpoints for managing customer payments 🛒"))
 
                 // ----------------- API INFO -----------------
                 .info(new Info()

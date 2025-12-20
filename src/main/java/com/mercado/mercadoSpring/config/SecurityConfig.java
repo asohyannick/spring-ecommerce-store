@@ -94,16 +94,22 @@ public class SecurityConfig {
                         )
 
                         .requestMatchers(
-                                apiBase + "/cart/{cartItemId}/add",
-                                apiBase + "/cart/items",
-                                apiBase + "/cart/products/details",
-                                apiBase + "/cart/{cartId}/items",
-                                apiBase + "/cart/item/{cartItemId}/remove",
-                                apiBase + "/cart/{cartId}/clear",
-                                apiBase + "/cart/{cartId}/total-quantity",
-                                apiBase + "/cart/{cartId}/total-price",
-                                apiBase + "/cart/item/{cartItemId}/update-quantity/{quantity}"
+                                apiBase + "/payment/create-payment-intent",
+                                apiBase + "/payment/fetch-payments",
+                                apiBase + "/payment/fetch-payment/{id}"
+                        ).hasAnyRole(
+                                UserRole.SELLER.name(),
+                                UserRole.CUSTOMER.name()
+                        )
 
+                        .requestMatchers(
+                                apiBase + "/cart/create-cart",
+                                apiBase + "/cart/fetch-cart/{cartId}",
+                                apiBase + "/cart/all-carts",
+                                apiBase + "/cart/add-item/{cartId}/item",
+                                apiBase + "/cart/update-cart/{cartId}/item/{productId}",
+                                apiBase + "/cart/remove-item/{cartId}/item/{productId}",
+                                apiBase + "/cart/clear-cart/{cartId}"
                         ).hasAnyRole(
                                 UserRole.ADMIN.name(),
                                 UserRole.SELLER.name(),
@@ -114,14 +120,10 @@ public class SecurityConfig {
                                 apiBase + "payments/create-intent",
                                 apiBase + "payments/fetch-payments",
                                 apiBase + "payments/fetch-payments/{id}"
-                        ).hasAnyRole(UserRole.CUSTOMER.name())
-
-                        .requestMatchers(
-                                apiBase + "/orders/create-order",
-                                apiBase + "/orders/user/{userId}/orders",
-                                apiBase + "/orders/{orderId}/details",
-                                apiBase + "/orders/{orderId}/cancel"
-                        ).hasAnyRole(UserRole.CUSTOMER.name())
+                        ).hasAnyRole(
+                                UserRole.CUSTOMER.name(),
+                                UserRole.ADMIN.name()
+                        )
 
                         // ---------- ADMIN routes ----------
                         .requestMatchers(

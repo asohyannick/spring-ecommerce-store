@@ -1,13 +1,8 @@
 package com.mercado.mercadoSpring.dto.payment;
 public record CreatePaymentResponseDTO(
         String paymentId,
-        String paymentUrl,
+        String clientSecret,
         String status,
         String provider,
-        String providerRef,
-        String orderId,
-        String stripeSessionId,
-        String redirectUrl,
-        String clientSecret
-) {
-}
+        String providerRef
+) {}

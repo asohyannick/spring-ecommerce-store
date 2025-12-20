@@ -42,7 +42,7 @@ jwt:
 
 # Stripe Configuration
 stripe:
-  api-key: ${STRIPE_API_KEY}
+  apiKey: ${STRIPE_API_KEY}
   webhookSecret: ${STRIPE_WEBHOOK_SECRET}
 
 # Firebase Configuration

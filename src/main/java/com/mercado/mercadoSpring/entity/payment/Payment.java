@@ -4,6 +4,12 @@ import com.mercado.mercadoSpring.constants.paymentProvider.PaymentProvider;
 import com.mercado.mercadoSpring.constants.paymentStatus.PaymentStatus;
 import jakarta.persistence.*;
 import java.time.Instant;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "payments", indexes = {
         @Index(name = "idx_payment_order_id", columnList = "orderId"),
@@ -12,8 +18,8 @@ import java.time.Instant;
 })
 public class Payment {
 
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     private PaymentProvider provider = PaymentProvider.STRIPE;
