@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.List;
 @Service
 @RequiredArgsConstructor
@@ -24,7 +23,8 @@ public class ProductService {
 
     // Create product
     public Product createProduct(Product product) {
-        return productRepository.save(product);
+        Product products = new Product();
+        return productRepository.save(products);
     }
 
     // Get all products
@@ -38,11 +38,9 @@ public class ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product with ID " + id + " not found"));
     }
 
-    // Update product
     public Product updateProduct(Long id, Product updatedProduct) {
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product with ID " + id + " not found"));
-
         // Update fields
         existingProduct.setName(updatedProduct.getName());
         existingProduct.setDescription(updatedProduct.getDescription());
@@ -58,7 +56,6 @@ public class ProductService {
         existingProduct.setState(updatedProduct.getState());
         existingProduct.setZipCode(updatedProduct.getZipCode());
         existingProduct.setImageURL(updatedProduct.getImageURL());
-
         return productRepository.save(existingProduct);
     }
 
@@ -71,22 +68,27 @@ public class ProductService {
     }
 
     // Filter/query methods
-    public List<Product> getProductsByCategory(String category) {
+    public List<Product> getProductsByCategory(
+            String category
+    ) {
         return productRepository.findByCategory(category);
     }
 
-    public List<Product>  findProductsByDescription(String description) {
+    public List<Product> findProductsByDescription(String description) {
         return productRepository.findByDescriptionContaining(description);
     }
 
-    public List<Product> getProductsByCategoryAndDescription(String category, String description) {
+    public List<Product> getProductsByCategoryAndDescription(
+            String category,
+            String description
+    ) {
         if (category != null) category = category.trim();
         if (description != null) description = description.trim();
         return productRepository.findByCategoryAndDescription(category, description);
     }
 
     public List<Product> searchProducts(
-            @RequestParam(required = false, name = "name") String keyword, // <-- FIX 1
+            @RequestParam(required = false, name = "name") String keyword,
             @RequestParam(required = false) String brand,
             String category,
             Double minPrice,
@@ -131,14 +133,23 @@ public class ProductService {
         // Multi-field dynamic sorting
         Sort sort = Sort.by(
                 sortFields.stream()
-                        .map(f -> direction.equalsIgnoreCase("desc") ? Sort.Order.desc(f) : Sort.Order.asc(f))
+                        .map(f -> direction.equalsIgnoreCase("desc")
+                                ? Sort.Order.desc(f) : Sort.Order.asc(f))
                         .toList()
         );
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<ProductResponseDTO> productPage = productRepository.filterProducts(
-                keyword, brand, category, minPrice, maxPrice, available, minRating, maxRating, pageable
+                keyword,
+                brand,
+                category,
+                minPrice,
+                maxPrice,
+                available,
+                minRating,
+                maxRating,
+                pageable
         ).map(productMapper::toResponseDTO);
 
         return new PageResponse<>(

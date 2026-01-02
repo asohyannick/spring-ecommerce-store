@@ -99,7 +99,7 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>io.jsonwebtoken</groupId>
+            <groupId>io.jsonwebtoken</groupId> 
             <artifactId>jjwt-api</artifactId>
             <version>0.13.0</version>
         </dependency>

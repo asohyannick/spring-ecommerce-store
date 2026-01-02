@@ -1,13 +1,9 @@
 package com.mercado.mercadoSpring.utils;
-
 import com.mercado.mercadoSpring.constants.user.UserRole;
-
 import java.util.Map;
-
 public class RoleAssigner {
-
     // Map of Email to Roles
-    private static  final Map<String, UserRole> emailRoleMap = Map.of(
+    private static final Map<String, UserRole> emailRoleMap = Map.of(
             "@admin.co", UserRole.ADMIN,
             "@seller", UserRole.SELLER,
             "@dev", UserRole.DEVELOPER,

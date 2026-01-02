@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
         @Index(name = "idx_payment_provider_ref", columnList = "provider,providerRef", unique = true)
 })
 public class Payment {
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)

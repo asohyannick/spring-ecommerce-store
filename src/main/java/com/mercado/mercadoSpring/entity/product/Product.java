@@ -1,7 +1,6 @@
 package com.mercado.mercadoSpring.entity.product;
 import jakarta.persistence.*;
 import lombok.*;
-
 @Entity
 @Table(name = "product")
 @Getter

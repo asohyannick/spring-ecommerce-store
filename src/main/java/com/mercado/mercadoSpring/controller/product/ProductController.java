@@ -14,11 +14,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import io.swagger.v3.oas.annotations.Parameter;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
 import java.util.List;
 @RestController
 @RequestMapping("/api/${API_VERSION}/products")
@@ -32,7 +29,9 @@ public class ProductController {
     // Create a new product
     @PostMapping("/create-product")
     @Operation(summary = "Create a new product", description = "Creates a new product in the system")
-    public ResponseEntity<ApiResponseConfig<ProductDto>> createProduct(@Valid @RequestBody ProductDto productDto) {
+    public ResponseEntity<ApiResponseConfig<ProductDto>> createProduct(
+            @Valid @RequestBody ProductDto productDto
+    ) {
         Product product = productMapper.toEntity(productDto);
         Product savedProduct = productRepository.save(product);
         ProductDto savedProductDto = productMapper.toDto(savedProduct);
@@ -61,7 +60,9 @@ public class ProductController {
 
     @GetMapping("/single-product/{id}")
     @Operation(summary = "Get product by ID", description = "Retrieves a product by its ID")
-    public ResponseEntity<ApiResponseConfig<ProductDto>> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseConfig<ProductDto>> getProductById(
+            @PathVariable Long id
+    ) {
         Product product = productService.getProductById(id);
         ProductDto productDto = productMapper.toDto(product);
 
@@ -69,7 +70,6 @@ public class ProductController {
                 "Product retrieved successfully ✅",
                 productDto
         );
-
         return ResponseEntity.ok(response);
     }
 
@@ -90,14 +90,14 @@ public class ProductController {
                 "Product updated successfully 🔄",
                 updatedProductDto
         );
-
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/delete-product/{id}")
     @Operation(summary = "Delete product", description = "Deletes a product by its ID")
-    public ResponseEntity<ApiResponseConfig<ProductDto>> deleteProduct(@PathVariable Long id) {
-
+    public ResponseEntity<ApiResponseConfig<ProductDto>> deleteProduct(
+            @PathVariable Long id
+    ) {
         // 1️⃣ Fetch product before deletion
         Product product = productService.getProductById(id);
         ProductDto deletedProductDto = productMapper.toDto(product);
@@ -107,7 +107,7 @@ public class ProductController {
 
         // 3️⃣ Return deleted product with a success message
         ApiResponseConfig<ProductDto> response = new ApiResponseConfig<>(
-                "Product deleted successfully 🗑️",
+                "Product has been deleted successfully! 🗑️",
                 deletedProductDto
         );
 
@@ -170,12 +170,10 @@ public class ProductController {
         List<ProductDto> productDtos = products.stream()
                 .map(productMapper::toDto)
                 .toList();
-
         ApiResponseConfig<List<ProductDto>> response = new ApiResponseConfig<>(
                 "Products fetched by description successfully 📝",
                 productDtos
         );
-
         return ResponseEntity.ok(response);
     }
 
@@ -191,7 +189,7 @@ public class ProductController {
                 .toList();
 
         ApiResponseConfig<List<ProductDto>> response = new ApiResponseConfig<>(
-                "Products fetched by both category and description 🎯",
+                "Products have been fetched by both category and description successfully! 🎯",
                 productDtos
         );
 
@@ -221,12 +219,13 @@ public class ProductController {
             @Parameter(description = "Fields to sort by, comma-separated") @RequestParam(defaultValue = "price") List<String> sortFields,
             @Parameter(description = "Sort direction: asc or desc") @RequestParam(defaultValue = "asc") String direction
     ) {
-
         PageResponse<ProductResponseDTO> products = productService.filterProducts(
                 keyword, brand, category, minPrice, maxPrice, available,
                 minRating, maxRating, page, size, sortFields, direction
         );
-
-        return new ApiResponseConfig<>("Products filtered, sorted, and paginated successfully 🛒", products);
+        return new ApiResponseConfig<>(
+                "Products filtered, sorted, and paginated successfully 🛒",
+                products
+        );
     }
 }

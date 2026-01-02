@@ -8,6 +8,4 @@ public record UserResponseDto(
         Boolean isAccountBlocked,
         Date  createdAt,
         Date updatedAt
-) {
-
-}
+) { }

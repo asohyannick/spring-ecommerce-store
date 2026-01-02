@@ -7,11 +7,8 @@ import java.util.Optional;
 
 public interface AuthRepository extends JpaRepository<Auth, Long> {
     List<Auth> findByRole(UserRole role);
-
     Optional<Auth> findByEmail(String email);
-
     boolean existsByEmail(String email);
-
     Optional<Auth> findByMagicToken(String magicToken);
     Optional<Auth> findByTwoFactorSecretAndIsTwoFactorVerifiedFalse(String otp);
     Optional<Auth> findByRefreshToken(String refreshToken);

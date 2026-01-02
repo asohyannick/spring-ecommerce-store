@@ -42,7 +42,6 @@ public class CartService {
                     Set<CartItemResponse> items = cart.getCartItems().stream()
                             .map(this::toItemResponse)
                             .collect(Collectors.toSet());
-
                     return new CartResponse(
                             cart.getId(),
                             items,
@@ -98,7 +97,11 @@ public class CartService {
     }
 
     @Transactional
-    public CartResponse updateProductQuantity(Long cartId, Long productId, int quantity) {
+    public CartResponse updateProductQuantity(
+            Long cartId,
+            Long productId,
+            int quantity
+    ) {
         if (quantity < 0) throw new IllegalArgumentException("quantity must be >= 0");
 
         CartItem item = cartItemRepository.findByCartIdAndProductId(cartId, productId)

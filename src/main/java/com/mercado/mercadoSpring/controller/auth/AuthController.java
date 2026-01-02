@@ -93,7 +93,6 @@ public class AuthController {
     @Operation(summary = "Resend 2FA OTP to the user's email")
     public ResponseEntity<ApiResponseConfig<Auth>> resendOTP(@RequestBody Map<String, String> request) {
         Auth user = authService.resendOTP(request);
-
         ApiResponseConfig<Auth> response = new ApiResponseConfig<>(
                 "A new OTP has been sent to your email.",
                 user
@@ -166,21 +165,23 @@ public class AuthController {
 
         // Wrap in ApiResponseConfig
         ApiResponseConfig<ResponseDto> apiResponse = new ApiResponseConfig<>(
-                "Login successful!",
+                "Login is successful!",
                 responseDto
         );
-
         return ResponseEntity.ok(apiResponse);
     }
 
     @PostMapping("/logout/{userId}")
     @Operation(summary = "Logout user and invalidate tokens")
-    public ResponseEntity<ApiResponseConfig<ResponseDto>> logout(@PathVariable Long userId, HttpServletResponse   response) {
+    public ResponseEntity<ApiResponseConfig<ResponseDto>> logout(
+            @PathVariable Long userId,
+            HttpServletResponse response
+    ) {
         ResponseDto responseDto = authService.logout(userId);
         // Clear HttpOnly cookies
         clearAuthCookies(response);
         ApiResponseConfig<ResponseDto> apiResponse = new ApiResponseConfig<>(
-                "Logout successful!",
+                "Logout is successful!",
                 responseDto
         );
 
@@ -189,9 +190,10 @@ public class AuthController {
 
     @DeleteMapping("/delete/{userId}")
     @Operation(summary = "Delete a user account")
-    public ResponseEntity<ApiResponseConfig<ResponseDto>> deleteAccount(@PathVariable Long userId) {
+    public ResponseEntity<ApiResponseConfig<ResponseDto>> deleteAccount(
+            @PathVariable Long userId
+    ) {
         ResponseDto responseDto = authService.deleteAccount(userId);
-
         ApiResponseConfig<ResponseDto> response = new ApiResponseConfig<>(
                 "Account deleted successfully!",
                 responseDto
@@ -260,7 +262,7 @@ public class AuthController {
         Auth user = authService.findUserById(userId);
 
         ApiResponseConfig<Auth> response = new ApiResponseConfig<>(
-                "User fetched successfully",
+                "User has been fetched successfully",
                 user
         );
 
@@ -269,11 +271,12 @@ public class AuthController {
 
     @PatchMapping("/block-account/{userId}")
     @Operation(summary = "Block a user account")
-    public ResponseEntity<ApiResponseConfig<Auth>> blockUser(@PathVariable Long userId) {
+    public ResponseEntity<ApiResponseConfig<Auth>> blockUser(
+            @PathVariable Long userId
+    ) {
         Auth blockedUser = authService.blockUser(userId);
-
         ApiResponseConfig<Auth> response = new ApiResponseConfig<>(
-                "User account blocked successfully",
+                "User account has been blocked successfully",
                 blockedUser
         );
 
@@ -282,11 +285,13 @@ public class AuthController {
 
     @PatchMapping("/unblock-account/{userId}")
     @Operation(summary = "Unblock a user account")
-    public ResponseEntity<ApiResponseConfig<Auth>> unBlockUser(@PathVariable Long userId) {
+    public ResponseEntity<ApiResponseConfig<Auth>> unBlockUser(
+            @PathVariable Long userId
+    ) {
         Auth unblockedUser = authService.unBlockUser(userId);
 
         ApiResponseConfig<Auth> response = new ApiResponseConfig<>(
-                "User account unblocked successfully",
+                "User account has been unblocked successfully!",
                 unblockedUser
         );
 

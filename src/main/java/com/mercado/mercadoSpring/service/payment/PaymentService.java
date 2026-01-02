@@ -52,7 +52,7 @@ public class PaymentService {
         payment.setAmount(requestDTO.amount());
 
         payment.setCurrency(Currency.valueOf(
-                requestDTO.currency().toUpperCase()
+                requestDTO.currency().toUpperCase().trim()
         ));
         payment.setStatus(PaymentStatus.CREATED);
 
@@ -65,6 +65,7 @@ public class PaymentService {
                 payment.getProviderRef()
         );
     }
+
     public Payment findPaymentById(String paymentId) {
         return paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new RuntimeException("Payment not found"));

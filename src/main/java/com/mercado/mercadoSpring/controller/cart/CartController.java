@@ -68,7 +68,6 @@ public class CartController {
             @PathVariable Long cartId,
             @Valid @RequestBody AddToCartRequest request
     ) {
-        System.out.println("DEBUG AddToCartRequest => " + request);
         return ResponseEntity.ok(
                 cartService.addItemToCart(
                         cartId,
@@ -126,7 +125,9 @@ public class CartController {
             responseCode = "204",
             description = "Successfully cleared cart"
     )
-    public ResponseEntity<Void> clearCart(@PathVariable Long cartId) {
+    public ResponseEntity<Void> clearCart(
+            @PathVariable Long cartId
+    ) {
         cartService.clearCart(cartId);
         return ResponseEntity.noContent().build();
     }

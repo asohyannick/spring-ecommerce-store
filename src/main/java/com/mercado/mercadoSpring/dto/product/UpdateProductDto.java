@@ -1,8 +1,6 @@
 package com.mercado.mercadoSpring.dto.product;
-
 import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 @Schema(description = "Data Transfer Object for updating a Product")
 public record UpdateProductDto(
         @Schema(description = "Unique identifier of the product", example = "1")

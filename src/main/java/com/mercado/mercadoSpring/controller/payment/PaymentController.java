@@ -15,9 +15,11 @@ import java.util.List;
 @Tag(name = "Payment Management Endpoints", description = "APIs for creating and retrieving payments")
 public class PaymentController {
     private final PaymentService paymentService;
+
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
     }
+
     @PostMapping("/create-payment-intent")
     @ApiResponse(responseCode = "201", description = "Payment intent created successfully")
     @ApiResponse(responseCode = "400", description = "Invalid payment request payload")

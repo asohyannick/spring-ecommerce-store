@@ -10,7 +10,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p " +
             "WHERE (:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "   OR LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+            " OR LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
             "AND (:brand IS NULL OR LOWER(p.brand) = LOWER(:brand)) " +
             "AND (:category IS NULL OR LOWER(p.category) = LOWER(:category)) " +
             "AND (:available IS NULL OR p.available = :available) " +
@@ -41,11 +41,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "AND (:description IS NULL OR LOWER(TRIM(p.description)) LIKE LOWER(CONCAT('%', TRIM(:description), '%')))")
     List<Product> findByCategoryAndDescription(@Param("category") String category,
                                                @Param("description") String description);
+
    //  @Query("SELECT p FROM Product p WHERE LOWER(p.isAvailable) LIKE LOWER(CONCAT('%', :isAvailable, '%'))")
     List<Product> findByAvailableTrue();
 
 //    @Query("SELECT p FROM Product p WHERE LOWER(p.isAvailable) LIKE LOWER(CONCAT('%', :isAvailable, '%'))")
     List<Product> findByAvailableFalse();
+
     List<Product> findByCategoryAndAvailableTrue(String category);
 
     @Query("""

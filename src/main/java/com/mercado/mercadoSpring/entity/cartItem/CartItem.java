@@ -8,11 +8,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
-
 @Entity
 @Table(
         name = "cart_items",
@@ -28,7 +26,6 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 public class CartItem {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,7 +37,7 @@ public class CartItem {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cart_id", nullable = false)
-    @JsonIgnore // recommended if entities might ever be serialized
+    @JsonIgnore
     private Cart cart;
 
     @NotNull

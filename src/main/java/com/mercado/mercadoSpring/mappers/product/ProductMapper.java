@@ -9,10 +9,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT
 )
 public interface ProductMapper {
-
     ProductDto toDto(Product product);
-
     Product toEntity(ProductDto productDto);
-
     ProductResponseDTO toResponseDTO(Product product);
 }
